@@ -103,9 +103,94 @@ Game2048.prototype.moveLeft = function () {
 this.board = updatedBoard;
 };
 
-// to TEST:
+
+// to TEST at this point:
 
 // alinasGame = new Game2048();
 // alinasGame._renderBoard();
 // alinasGame.moveLeft();
 // alinasGame._renderBoard();
+
+
+// ============================================
+ // MOVE RIGHT
+ // ============================================
+
+ Game2048.prototype.moveRight = function () {
+   var updatedBoard = [];
+
+   this.board.forEach(function (row) {
+     // 1 remove empty from row
+     var newRow = []; // in here are the number that are in the row
+
+     row.forEach( function (cell) {
+       if (cell !== null){
+         newRow.push(cell);
+       }
+     });
+
+     // 2 merge tile in the row that are together and the same number
+     for (var i = newRow.length - 1; i >= 0; i -= 1) {
+       // e.g [8, 8, 4] -> [16, null, 4]
+       if (newRow[i] === newRow[i + 1]) {
+         newRow[i] *= 2;
+         newRow[i - 1] = null;
+       }
+     }
+     //3 remove new empties in the middle
+     // e.g [8, 8, 4] -> [16, 4] getting the null out
+     var moved = [];
+
+     newRow.forEach( function (cell) {
+       if (cell !== null){
+         moved.push(cell);
+       }
+     });
+
+     // 4 push() nulls until row has length 4 again
+     while (moved.length < 4) {
+       moved.unshift(null);
+     }
+
+     updatedBoard.unshift(moved);
+   });
+
+     this.board = updatedBoard;
+ };
+
+
+// to TEST at this point:
+
+// alinasGame = new Game2048();
+// alinasGame._renderBoard();
+// alinasGame.moveRight();
+// alinasGame._renderBoard();
+
+// ============================================
+ // MOVE UP/DOWN
+ // ============================================
+
+
+Game2048.prototype._transposeMatrix = function () {
+  for (var row = 0; row < this.board.length; row++) {
+    for (var column = row+1; column < this.board.length; column++) {
+      var temp = this.board[row][column];
+      this.board[row][column] = this.board[column][row];
+      this.board[column][row] = temp;
+    }
+  }
+};
+
+
+Game2048.prototype.moveUp = function () {
+  this._transposeMatrix();
+  this.moveLeft();
+  this._transposeMatrix();
+};
+
+
+Game2048.prototype.moveDown = function () {
+  this._transposeMatrix();
+  this.moveRight();
+  this._transposeMatrix();
+};
