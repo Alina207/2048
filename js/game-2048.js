@@ -22,7 +22,7 @@ Game2048.prototype._generateTile = function () {
     tileValue = 4;
   }
 
-  this._getAvailablePosition(); // tries to figure out what are the empty spaces in my board; its gonna give me a random empty position or null so save that to a var
+  var emptyTile = this._getAvailablePosition(); // tries to figure out what are the empty spaces in my board; its gonna give me a random empty position or null so save that to a var
 
   if (emptyTile !== null) {
     var row = emptyTile.x;
@@ -57,3 +57,55 @@ Game2048.prototype._renderBoard = function () { // just prints out everything in
     console.log(row);
   });
 };
+
+Game2048.prototype.moveLeft = function () {
+  var updatedBoard = [];
+
+  this.board.forEach(function (row) {
+    //1. Remove empties from row; remove the item if its null
+    var newRow = [];
+
+    row.forEach(function (cell) {
+      if (cell !== null) {
+        newRow.push(cell);
+      }
+    });
+
+    //2. Merge tiles that are together and same #
+
+    for (var i = 0; i < newRow.length; i += 1) {
+      if (newRow[i] === newRow[i +1]) {
+      newRow[i] *= 2;
+      newRow[i+1] = null;
+    }
+  }
+
+  // 3. Remove new empties in the middle
+  //     e.g. when step #2 turns [8, 8, 4] into [16, null, 4]
+  //          we want to end up with [16, 4]
+  var moved = [];
+
+  newRow.forEach(function (cell) {
+    if (cell !== null) {
+      moved.push(cell);
+    }
+  });
+
+
+  // 4. push() nulls until row has length 4 again
+  while (moved.length < 4) {
+    moved.push(null);
+  }
+
+  updatedBoard.push(moved);
+});
+
+this.board = updatedBoard;
+};
+
+// to TEST:
+
+// alinasGame = new Game2048();
+// alinasGame._renderBoard();
+// alinasGame.moveLeft();
+// alinasGame._renderBoard();
