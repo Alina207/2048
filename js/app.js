@@ -1,4 +1,5 @@
-// 1. Create a new game when the player opens the browser/the page loads. AKA Create game object
+// 1. Create Game Object
+  //  Create a new game when the player opens the browser/the page loads. AKA Create game object
   // When do we create the game object? When document ready AKA window.onload
 
 var  myGlobalGame;
@@ -6,42 +7,70 @@ var  myGlobalGame;
 $(document).ready(function () {
   myGlobalGame = new Game2048();
 
+// 2. Take the initial tiles and put them on the screen
+  // Take the initial info in that object (tiles) and put them on the screen define to make use of the myGlobalGame function
+  renderTiles();
 
-  renderTiles(); // 2. Take the initial info in that object (tiles) and put them on the screen define to make use of the myGlobalGame function
-
-  $(document).keydown(function (ev) {
+// 3. handle keyboard events
+  $(document).keydown(moveGame);
+  });
 
   // prevent arrow key scrolling
-  var acceptableKeys = [37, 65, 38, 87, 39, 68, 40, 83 ];
-  if (!acceptableKeys.includes(ev.keyCode)) {
-    return;
-  }
-  ev.preventDefault();
+  function moveGame (ev) {
+    var acceptableKeys = [ 37, 65, 38, 87, 39, 68, 40, 83 ];
 
-// 4. Move board in object based on keypresses (up, down, left, right)
-  // move if correct keys were pressed
-    switch (ev.keyCode) {
-      case 37:
-      case 65:
-        myGlobalGame.move('left');
-        break;
-      case 38:
-      case 87:
-        myGlobalGame.move('up');
-        break;
-      case 39:
-      case 68:
-        myGlobalGame.move('right');
-      break;
-      case 40:
-      case 83:
-        myGlobalGame.move('down');
-      break;
+    if (!acceptableKeys.includes(ev.keyCode)) {
+      return;
     }
 
+    // prevent arrow key scrolling
+    ev.preventDefault();
+
+    // 4. move board in object based on keypresses (up, down, left, right)
+    // move if correct keys were pressed
+    switch (ev.keyCode) {
+      case 37:  // left arrow
+      case 65:  // a
+        myGlobalGame.move('left');
+        break;
+      case 38:  // up arrow
+      case 87:  // w
+        myGlobalGame.move('up');
+        break;
+      case 39:  // right arrow
+      case 68:  // d
+        myGlobalGame.move('right');
+        break;
+      case 40:  // down arrow
+      case 83:  // s
+        myGlobalGame.move('down');
+        break;
+    }
+    // 5. updating the screen based on new board state
     renderTiles();
-  });
-});
+    updateScore();
+
+    // 6. win or lose
+    checkIfDone();
+  }
+
+  function updateScore () {
+    $('#score-display').html(myGlobalGame.score);
+  }
+
+  function checkIfDone () {
+    if (myGlobalGame.hasWon) {
+      $('#game-board').remove();
+      var winnerHtml = '<img src="https://media.giphy.com/media/xTiTnz33weTH3K8Uvu/giphy.gif" alt="Winner">';
+      $('#container').append(winnerHtml);
+    }
+
+    else if (myGlobalGame.hasLost) {
+      $('#game-board').remove();
+      var loserHtml = '<img src="https://media.giphy.com/media/l3q2K12v7LgvwlATC/giphy.gif" alt="Loser">';
+      $('#container').append(loserHtml);
+    }
+  }
 
   // There's really 2 boards: the board in the object and the board on the screen
   // Since there isn't a magical connection between the object and the screen we create that with code
@@ -59,17 +88,10 @@ $(document).ready(function () {
       // console.log("Tile value: " + cell);
       // console.log("Row " + rowIndex);
       // console.log("Column: " + colIndex);
-      var tileHtml = '<div class="tile tile-position-' + rowIndex + '-' + colIndex + ' val-' + cell + '">' + cell +'</div>';
-       $("#tile-container").append(tileHtml);
 
-      });
+      // put cell on the screen
+      var tileHtml = '<div class="tile tile-position-' + rowIndex + '-' + colIndex + ' val-' + cell + '"> ' + cell + ' </div>';
+      $('#tile-container').append(tileHtml);
     });
-  }
-
-// 3. Handle keyboard events
-
-
-
-// 5. Updating the screen based on the new board state
-
-// 6. Win or Lose?
+  });
+}
