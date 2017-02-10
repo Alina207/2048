@@ -263,8 +263,8 @@ Game2048.prototype.moveDown = function () {
  Game2048.prototype._isGameLost = function () {
    if (this._getAvailablePosition() !== null) {
      return;
-   }
 
+   }
    var theGame = this;
 
    this.board.forEach(function (row, rowIndex) {
