@@ -6,16 +6,49 @@ var  myGlobalGame;
 $(document).ready(function () {
   myGlobalGame = new Game2048();
 
-  renderTiles(); // define to make use of the myGlobalGame function
+
+  renderTiles(); // 2. Take the initial info in that object (tiles) and put them on the screen define to make use of the myGlobalGame function
+
+  $(document).keydown(function (ev) {
+
+  // prevent arrow key scrolling
+  var acceptableKeys = [37, 65, 38, 87, 39, 68, 40, 83 ];
+  if (!acceptableKeys.includes(ev.keyCode)) {
+    return;
+  }
+  ev.preventDefault();
+
+// 4. Move board in object based on keypresses (up, down, left, right)
+  // move if correct keys were pressed
+    switch (ev.keyCode) {
+      case 37:
+      case 65:
+        myGlobalGame.move('left');
+        break;
+      case 38:
+      case 87:
+        myGlobalGame.move('up');
+        break;
+      case 39:
+      case 68:
+        myGlobalGame.move('right');
+      break;
+      case 40:
+      case 83:
+        myGlobalGame.move('down');
+      break;
+    }
+
+    renderTiles();
+  });
 });
 
-// 2. Take the initial info in that object (tiles) and put them on the screen
   // There's really 2 boards: the board in the object and the board on the screen
   // Since there isn't a magical connection between the object and the screen we create that with code
   // we'll loop through every single cell in the board to do this
 
   function renderTiles () {
-    $("#tile-container").empty(); // clears out existing tiles in the DOM 
+    $("#tile-container").empty(); // clears out existing tiles in the DOM
 
     myGlobalGame.board.forEach(function (row, rowIndex) {
       row.forEach(function (cell, colIndex) {
@@ -35,7 +68,7 @@ $(document).ready(function () {
 
 // 3. Handle keyboard events
 
-// 4. Move board in object based on keypresses (up, down, left, right)
+
 
 // 5. Updating the screen based on the new board state
 

@@ -82,7 +82,7 @@ Game2048.prototype.moveLeft = function () {
 
     //2. Merge tiles that are together and same #
 
-    for (var i = 0; i < newRow.length; i += 1) {
+    for (var i = 0; i < newRow.length; i ++) {
       if (newRow[i] === newRow[i +1]) {
       newRow[i] *= 2;
       newRow[i+1] = null;
@@ -149,9 +149,9 @@ this.board = updatedBoard;
      });
 
      // 2 merge tile in the row that are together and the same number
-     for (var i = newRow.length - 1; i >= 0; i -= 1) {
+     for (var i = newRow.length - 1; i >= 0; i --) {
        // e.g [8, 8, 4] -> [16, null, 4]
-       if (newRow[i] === newRow[i + 1]) {
+       if (newRow[i] === newRow[i - 1]) {
          newRow[i] *= 2;
          newRow[i - 1] = null;
        }
@@ -175,11 +175,7 @@ this.board = updatedBoard;
        moved.unshift(null);
      }
 
-     if (newRow.length !== row.length) {
-       this.boardHasChanged = true;
-     }
-
-     updatedBoard.unshift(moved);
+     updatedBoard.push(moved);
    });
 
      this.board = updatedBoard;
@@ -272,10 +268,10 @@ Game2048.prototype.moveDown = function () {
 
    this.board.forEach(function (row, rowIndex) {
      row.forEach(function (cell, colIndex) {
-       var current = that.board[rowIndex][colIndex];
+       var current = theGame.board[rowIndex][colIndex];
        var top, bottom, left, right;
 
-       if (that.board[rowIndex][colIndex - 1]) {
+       if (theGame.board[rowIndex][colIndex - 1]) {
          left = theGame.board[rowIndex][colIndex - 1];
        }
        if (theGame.board[rowIndex][colIndex + 1]) {
