@@ -103,7 +103,7 @@ function loadSounds () {
   ion.sound({
     sounds: [{name: "snap"}, {name: "tap"}, {name: "beer_can_opening"}],
 
-    path: "../lib/ion.sound/sounds/",
+    path: "lib/ion.sound/sounds/",
     preload: true,
     volume: 1.0
   });
