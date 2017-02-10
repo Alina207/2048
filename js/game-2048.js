@@ -223,6 +223,7 @@ Game2048.prototype.moveDown = function () {
 
 
  Game2048.prototype.move = function (direction) {
+   ion.sound.play("snap");
 // an early return to check for an error. If we do reurn will stop it because return is a break for functions
   if (this.hasWon || this.hasLost) {
     return;

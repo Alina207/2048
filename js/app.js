@@ -10,6 +10,7 @@ $(document).ready(function () {
 // 2. Take the initial tiles and put them on the screen
   // Take the initial info in that object (tiles) and put them on the screen define to make use of the myGlobalGame function
   renderTiles();
+  loadSounds();
 
 // 3. handle keyboard events
   $(document).keydown(moveGame);
@@ -95,3 +96,18 @@ $(document).ready(function () {
     });
   });
 }
+
+// Sounds file "recipe"
+
+function loadSounds () {
+  ion.sound({
+    sounds: [{name: "snap"}, {name: "tap"}, {name: "beer_can_opening"}],
+
+    path: "../lib/ion.sound/sounds/",
+    preload: true,
+    volume: 1.0
+  });
+}
+
+// Also need to put loadSounds(); in the $(document).ready(function () to "prepare the food"
+// See movement section in game-2048.js file for how to "eat the food" aka call the method
